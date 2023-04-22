@@ -1,0 +1,33 @@
+<mat-spinner *ngIf="this.isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="posts!.length > 0 && !this.isLoading">
+  <mat-expansion-panel *ngFor="let post of posts">
+    <mat-expansion-panel-header>
+      {{ post.title }}
+    </mat-expansion-panel-header>
+    <div class="post-image">
+      <img [src]="post.imagePath" alt="post.title" />
+    </div>
+    <p>{{ post.content }}</p>
+    <mat-action-row
+      *ngIf="this.isAuthenticated && post.creator === this.userId"
+    >
+      <button mat-button color="primary" (click)="this.toEdit(post.id)">
+        EDIT
+      </button>
+      <button mat-button color="warn" (click)="this.deletePost(post)">
+        DELETE
+      </button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-paginator
+  *ngIf="posts!.length > 0"
+  [length]="this.totalPosts"
+  [pageSize]="this.postPerPage"
+  [pageSizeOptions]="this.pageSizeOptions"
+  (page)="this.onPageChange($event)"
+  aria-label="Select page"
+></mat-paginator>
+<p class="info-text mat-body-2" *ngIf="posts!.length <= 0 && !this.isLoading">
+  No posts added yet!
+</p>
